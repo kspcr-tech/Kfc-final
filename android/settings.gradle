@@ -1,9 +1,7 @@
 pluginManagement {
     repositories {
         google()
-        maven {
-            url "https://maven.aliyun.com/repository/gradle-plugin"
-        }
+        mavenCentral()
         gradlePluginPortal()
     }
 }
@@ -11,18 +9,10 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        // ✅ Maven Central mirror (primary)
-        maven {
-            url "https://maven.aliyun.com/repository/central"
-        }
-
-        // ✅ Android / Google artifacts
         google()
-
-        // ✅ Fallback (if mirror misses something)
         mavenCentral()
     }
 }
 
-rootProject.name = "KfcGiftCardVault"
+rootProject.name = "Kfc-final"
 include(":app")

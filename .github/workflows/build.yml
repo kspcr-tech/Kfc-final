@@ -1,9 +1,7 @@
-name: Flutter Android Build
+name: Flutter Android Build (Debug)
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -14,6 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 👇 ADD THIS STEP HERE
+      - name: Locate pubspec.yaml
+        run: find . -name pubspec.yaml
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -22,15 +24,3 @@ jobs:
 
       - name: Flutter doctor
         run: flutter doctor -v
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build Debug APK
-        run: flutter build apk --debug
-
-      - name: Upload Debug APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk

@@ -1,71 +1,63 @@
 package com.example.kfcvault.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.kfcvault.model.GiftCard
-import com.example.kfcvault.storage.GiftCardStore
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GiftCardScreen() {
-    var showPin by remember { mutableStateOf(false) }
 
-    Column(Modifier.fillMaxSize().padding(12.dp)) {
+    var giftCardNumber by remember { mutableStateOf("1234 5678 9012 3456") }
+    var isVisible by remember { mutableStateOf(false) }
 
-        Button(onClick = {
-            GiftCardStore.add(
-                GiftCard(
-                    cardNumber = "XXXX-XXXX-1234",
-                    pin = "1234"
-                )
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Gift Card Vault") }
             )
-        }) { Text("Add Gift Card") }
+        }
+    ) { paddingValues ->
 
-        Spacer(Modifier.height(12.dp))
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
 
-        LazyColumn {
-            items(GiftCardStore.active().size) { i ->
-                val card = GiftCardStore.active()[i]
-
-                Card(Modifier.padding(8.dp)) {
-                    Column(Modifier.padding(12.dp)) {
-                        Text("Card: ${card.cardNumber}")
-                        Text("Balance: ₹${card.balance}")
-                        Text("Expiry: ${card.expiry}")
-
-                        Row {
-                            Text(
-                                "PIN: " + if (showPin) card.pin else "****"
-                            )
-                            IconButton(onClick = { showPin = !showPin }) {
-                                Icon(
-                                    if (showPin) Icons.Default.VisibilityOff
-                                    else Icons.Default.Visibility,
-                                    contentDescription = null
-                                )
-                            }
-                        }
-
-                        Row {
-                            Button(onClick = { /* SMS refresh */ }) {
-                                Text("Refresh")
-                            }
-                            Spacer(Modifier.width(8.dp))
-                            Button(onClick = {
-                                GiftCardStore.update(card.copy(redeemed = true))
-                            }) {
-                                Text("Redeemed")
-                            }
-                        }
+            OutlinedTextField(
+                value = giftCardNumber,
+                onValueChange = {},
+                label = { Text("Gift Card Number") },
+                readOnly = true,
+                visualTransformation = if (isVisible)
+                    VisualTransformation.None
+                else
+                    PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(onClick = { isVisible = !isVisible }) {
+                        Icon(
+                            imageVector = if (isVisible)
+                                Icons.Filled.Visibility
+                            else
+                                Icons.Filled.VisibilityOff,
+                            contentDescription = "Toggle visibility"
+                        )
                     }
-                }
-            }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

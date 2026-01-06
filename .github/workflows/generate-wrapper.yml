@@ -1,4 +1,4 @@
-name: Generate Gradle Wrapper
+name: Generate REAL Gradle Wrapper
 
 on:
   workflow_dispatch:
@@ -19,14 +19,15 @@ jobs:
       - name: Install Gradle
         run: sudo apt-get update && sudo apt-get install -y gradle
 
-      - name: Generate Gradle Wrapper
+      - name: Generate real Gradle wrapper (Gradle 8.6)
         working-directory: android
-        run: gradle wrapper
+        run: |
+          gradle wrapper --gradle-version 8.6
 
-      - name: Commit wrapper files
+      - name: Commit real wrapper files
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add android/gradlew android/gradlew.bat android/gradle/wrapper
-          git commit -m "Add Gradle wrapper"
+          git commit -m "Add real Gradle wrapper (8.6)"
           git push
